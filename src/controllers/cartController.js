@@ -34,12 +34,12 @@ const createCart = async function (req, res) {
             let alreadyProductsId = isAlreadyCart.items.map(x => x.productId.toString())
             if (alreadyProductsId.includes(productId)) {
                 let updatedCart = await cartModel.findOneAndUpdate({ "items.productId": productId, userId: userId }, { $inc: { "items.$.quantity": 1, totalPrice: productPrice } }, { new: true })
-                return res.status(200).send({ status: true, message: "items added successfully", data: updatedCart })
+                return res.status(201).send({ status: true, message: "items added successfully", data: updatedCart })
             }
             else {
 
                 let updatedCart = await cartModel.findOneAndUpdate({ userId: userId }, { $push: { items: productDetails }, $inc: { totalItems: 1, totalPrice: productPrice } }, { new: true })
-                return res.status(200).send({ status: true, message: "items added successfully", data: updatedCart })
+                return res.status(201).send({ status: true, message: "items added successfully", data: updatedCart })
             }
         }
 
