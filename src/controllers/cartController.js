@@ -34,12 +34,12 @@ const createCart = async function (req, res) {
             let alreadyProductsId = isAlreadyCart.items.map(x => x.productId.toString())
             if (alreadyProductsId.includes(productId)) {
                 let updatedCart = await cartModel.findOneAndUpdate({ "items.productId": productId, userId: userId }, { $inc: { "items.$.quantity": 1, totalPrice: productPrice } }, { new: true })
-                return res.status(201).send({ status: true, message: "items added successfully", data: updatedCart })
+                return res.status(201).send({ status: true, message: "Success", data: updatedCart })
             }
             else {
 
                 let updatedCart = await cartModel.findOneAndUpdate({ userId: userId }, { $push: { items: productDetails }, $inc: { totalItems: 1, totalPrice: productPrice } }, { new: true })
-                return res.status(201).send({ status: true, message: "items added successfully", data: updatedCart })
+                return res.status(201).send({ status: true, message: "Success", data: updatedCart })
             }
         }
 
@@ -84,7 +84,6 @@ const updateCart = async function (req, res) {
         const cart = await cartModel.findOne({ $or: [{ "items.productId": productId, userId: userId }, { "items.productId": productId, _id: cartId }] })
         if (!cart) return res.status(404).send({ status: false, message: "This Product not present in the following Cart" })
 
-        if (!removeProduct) return res.status(400).send({ status: false, message: "Provide removeProduct field " })
         if (!isValid(removeProduct)) return res.status(400).send({ status: false, message: "remove Product must be present in request Body.." })
         if (!isValidNum(removeProduct)) return res.status(400).send({ status: false, message: "remove Product should contain 0 and 1 only.." })
 
