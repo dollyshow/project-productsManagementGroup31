@@ -25,10 +25,10 @@ const createCart = async function (req, res) {
         const product = await productModel.findOne({ _id: productId, isDeleted: false })
         if (!product) return res.status(400).send({ status: false, message: "product not found or may be deleted..." })
         const productPrice = product.price
-        if (cartId) {
-            if (!isValidObjectId(cartId)) return res.status(400).send({ status: false, message: "invalid cart Id.." })
-        }
-        const isAlreadyCart = await cartModel.findOne({ _id: cartId, userId: userId })
+        // if (cartId) {
+        //     if (!isValidObjectId(cartId)) return res.status(400).send({ status: false, message: "invalid cart Id.." })
+        // }
+        const isAlreadyCart = await cartModel.findOne({ userId: userId })
 
         if (isAlreadyCart) {
             let alreadyProductsId = isAlreadyCart.items.map(x => x.productId.toString())
