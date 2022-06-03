@@ -30,7 +30,7 @@ const createUser = async function (req, res) {
 
 
         if (!isValid(password)) return res.status(400).send({ status: false, message: "password is mandatory" })
-        if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length should be min 8 max 15 charavters " })
+        if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length bw 8-15 and one special char and 1 uppercase " })
 
         const bcryptPassword = await bcrypt.hash(password, 10)
         requestBody.password = bcryptPassword
@@ -98,16 +98,16 @@ const loginUser = async function (req, res) {
         if (!isValidEmail(email)) return res.status(400).send({ status: false, message: "email not valid" })
 
         if (!isValid(password)) return res.status(400).send({ status: false, message: "password is mandatory" })
-        if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length should be min 8 max 15 charavters " })
+        if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length bw 8-15 and one special char and 1 uppercase " })
 
         let userLoggedIn = await userModel.findOne({ email })
         if (!userLoggedIn) return res.status(404).send({ status: false, message: "email not registered" })
         let checkValidPass = await bcrypt.compare(password, userLoggedIn.password)
         if (!checkValidPass) return res.status(400).send({ status: false, message: "incorrect password" })
-        let token = jwt.sign(
+        let user_token = jwt.sign(
             { userId: userLoggedIn._id }, "e-commerceWebsite", { expiresIn: '4d' }
         )
-        return res.status(200).send({ status: true, message: "User login successfull", data: token })
+        return res.status(200).send({ status: true, message: "User login successfull", data: user_token })
     }
     catch (err) {
         return res.status(500).send({ status: false, error: err.message })
@@ -164,7 +164,7 @@ const updateUserDetails = async function (req, res) {
         }
         if (password) {
             if (!isValid(password)) return res.status(400).send({ status: false, msg: "password is not valid" })
-            if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length should be min 8 max 15 charavters " })
+            if (!isValidPwd(password)) return res.status(400).send({ status: false, message: "password not valid..password length bw 8-15 and one special char and 1 uppercase " })
             updateData.password = await bcrypt.hash(password, 10)
         }
         if (address) {
