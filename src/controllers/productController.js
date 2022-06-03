@@ -47,7 +47,7 @@ const createProduct = async function (req, res) {
         requestBody.productImage = imageUrl
 
         let productCreated = await productModel.create(requestBody)
-        return res.status(201).send({ status: true, message: "User created successfully", data: productCreated })
+        return res.status(201).send({ status: true, message: "Success", data: productCreated })
     }
     catch (err) {
         return res.status(500).send({ status: false, error: err.message })
@@ -83,7 +83,7 @@ const getProduct = async function (req, res) {
 
         const findProducts = await productModel.find(filterQuery).sort({ price: priceSort })
         if (!findProducts) return res.status(404).send({ status: false, message: "products not found or may be deleted" })
-        return res.status(200).send({ status: true, count: findProducts.length, message: "products details", data: findProducts })
+        return res.status(200).send({ status: true, count: findProducts.length, message: "Success", data: findProducts })
     }
     catch (err) {
         return res.status(500).send({ status: false, error: err.message })
@@ -98,7 +98,7 @@ const getProductById = async function (req, res) {
         if (!isValidObjectId(productId)) return res.status(400).send({ status: false, message: "invalid product Id.." })
         const findProduct = await productModel.findById({ _id: productId, isDeleted: false })
         if (!findProduct) return res.status(404).send({ status: false, message: "product details not found or may be deleted" })
-        return res.status(200).send({ status: true, message: "product details", data: findProduct })
+        return res.status(200).send({ status: true, message: "Success", data: findProduct })
     }
     catch (err) {
         return res.status(500).send({ status: false, error: err.message })
